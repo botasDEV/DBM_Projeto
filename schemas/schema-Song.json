@@ -1,0 +1,42 @@
+{
+    "title": "Song",
+    "description": "Entity Song",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Song's ID",
+            "unique": true,
+            "primary_key": true
+        },
+        "title": {
+            "type": "string",
+            "description": "Song's Title",
+            "maxLength": 100,
+            "unique": false
+        },
+        "duration": {
+            "type": "integer",
+            "description": "Song's Duration in Seconds",
+            "unique": false
+        },
+        "release_date": {
+            "type": "integer",
+            "description": "Album's Release",
+            "minimum": "strftime('%s', datetime('now'))",
+            "faker": "random.number",
+            "unique": false
+        },
+        "lyrics": {
+            "type": "string",
+            "description": "Song's Lyrics",
+            "unique": false
+        }
+        
+    },
+    "required": [
+        "title", "duration", "release_date"
+    ]
+    
+
+}

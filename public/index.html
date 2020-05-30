@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Gerador</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <h1>Gerador</h1>
+        <button>Gerar APP</button>
+        <p id="error" style="color:red; font-style: bold; "></p>
+        <p id="success" style="color:green; font-style: bold;"></p>
+    </body>
+    <script>
+        $('button').click((event) => {
+            $('p').hide();
+            $.post(
+                'http://localhost:8182/generate',
+                (data, status) => {
+                    $('#success').html(status.concat(' - ').concat(data));
+                    $('#success').show();
+                })
+            .fail((data) => {
+                $('#error').html(data.status.toString().concat(' - ').concat(data.statusText));
+                $('#error').show();
+            });
+        });
+    </script>
+</html>

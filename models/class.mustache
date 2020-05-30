@@ -1,0 +1,54 @@
+const database = require('../Database/sqlite-wrapper.js')('{{{dbPath}}}');
+const jsf = require('json-schema-faker');
+const faker = require('faker');
+jsf.extend('faker', ()=> {return faker});
+
+const schema{{classTitle}} = require('../Schemas/schema-{{classTitle}}.json');
+
+class {{classTitle}} {
+    constructor({{constructorArguments}}) {
+        {{#classConstructor}}
+            this.{{name}} = {{name}};
+        {{/classConstructor}}
+
+        {{#classEnumerables}}
+            Object.defineProperty(this, "{{name}}", {enumerable: false{{#writable}}, writable: true{{/writable}} });
+        {{/classEnumerables}}
+    }
+
+    static create() {
+        return Object.assign(new {{classTitle}}(), jsf.generate(schema{{classTitle}}));
+    }
+
+    static create() {
+        return Object.assign(new {{classTitle}}(), jsf.generate(schema{{classTitle}}));
+    }
+
+    static all(callback) {
+        database.where("SELECT * FROM {{classTitle}}", [], {{classTitle}}, callback);
+    }
+
+    save(callback) {
+        let query = "";
+        let propertiesJoin = "";
+        if (this.{{primaryKey}}) {
+            query = "UPDATE {{classTitle}} SET {{#propertiesUpdateJoin}}{{{name}}} = ?{{{comma}}}{{/propertiesUpdateJoin}} WHERE {{primaryKey}} = ?";
+            propertiesJoin = [{{#propertiesUpdateJoin}}this.{{{name}}}{{{comma}}}{{/propertiesUpdateJoin}}];
+        } else {
+            query = "INSERT INTO {{classTitle}} ({{#propertiesUpdateJoin}}{{{name}}}{{{comma}}}{{/propertiesUpdateJoin}}) VALUES({{#questionMark}}{{{symbol}}}{{{comma}}}{{/questionMark}})";
+            propertiesJoin = [{{#propertiesInsertJoin}}this.{{{name}}}{{{comma}}}{{/propertiesInsertJoin}}];
+        }
+        
+        database.run(query,propertiesJoin,callback);
+    }
+
+    static get({{primaryKey}}, callback) {
+        database.where("SELECT * FROM {{classTitle}} WHERE {{primaryKey}} = ?", [{{primaryKey}}], {{classTitle}}, callback)
+    }
+
+    static delete({{primaryKey}}, callback) {
+        database.run("DELETE FROM {{classTitle}} WHERE {{primaryKey}} = ?", [{{primaryKey}}], callback)
+    }
+}
+
+module.exports = {{classTitle}}
