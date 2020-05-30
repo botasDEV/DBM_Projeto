@@ -1,0 +1,43 @@
+const express = require('express');
+var router = express.Router();
+
+{{#schemas}}
+var {{title}} = require('../Models/{{title}}.js');
+
+router.post('/{{title}}', (req, res) => {
+    let obj = Object.assign(new {{title}}(), req.body);
+    obj.save(msg => res.json(msg));
+});
+
+router.post('/{{title}}/random/:times', (req, res) => {
+    let objTimes = req.params.times;
+    
+    for (let i = 0; i < objTimes; i++) {
+        {{title}}.create().save(msg => (i == objTimes - 1 ? res.json(msg) : console.log(i + '/' + objTimes) ));
+    }
+});
+
+router.get('/{{title}}', (req, res) => {
+    {{title}}.all((obj) => {res.json(obj);});
+});
+
+router.get('/{{title}}/:id', (req, res) => {
+    let id = req.params.id;
+    {{title}}.get(id, (obj) => res.json(obj));
+});
+
+router.put('/{{title}}/:id', (req, res) => {
+    let obj = Object.assign(new {{title}}(), req.body);
+    obj.id = req.params.id;
+
+    obj.save(msg => res.json(msg));
+});
+
+router.delete('/{{title}}/:id', (req, res) => {
+    let id = req.params.id;
+
+    {{title}}.delete(id, msg => res.json(msg));
+});
+
+module.exports = router;
+{{/schemas}}

@@ -2,6 +2,7 @@ const fs = require('fs');
 const mustache = require('mustache');
 const childProcess = require("child_process");
 
+
 module.exports = (serverConfigs) => {
     serverConfigs.staticFiles.forEach(staticFile => {
         fs.copyFileSync(staticFile.originalPath, staticFile.destinationPath);
