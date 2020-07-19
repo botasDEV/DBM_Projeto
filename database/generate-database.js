@@ -1,5 +1,8 @@
 const mustache = require("mustache");
+const references = require("./references");
 var sqlite3 = require("sqlite3").verbose();
+
+const classGenerator = require('../models/generate-class.js');
 const fs = require("fs");
 const constraintsGenerator = require('./constraints');
 
@@ -14,18 +17,21 @@ class Database {
             blob: 'BLOB'
         };
         Object.defineProperty(this, 'db', {writable: true});
-
-        this.create(this.dbName);
+        this.scripts = '';
+        this.create();
     }
 
-    create(dbName) {
-        this.db = new sqlite3.Database(dbName, function(err) {
+    create() {
+        let databaseClass = this;
+        this.db = new sqlite3.Database(this.dbName, function(err) {
             if (err) {
                 return console.error(err.message);
             }
             console.log('Connected to SQLite Database');
         });
     };
+
+    
 
     close() {
         this.db.close((err) => {
@@ -56,21 +62,33 @@ class Database {
                 needComa: (index < aux.length - 1)
             });
         });
-    
+
         let view = {
             tableName: jsonSchema.title,
             columnsData: columns
         };
     
         var template = fs.readFileSync('database/database.mustache').toString();
-        let output = mustache.render(template, view);
-        
-        this.db.run(output);
+        this.scripts += mustache.render(template, view);
     };
 
+
+    setReferences(schema) {
+        let jsonSchema = JSON.parse(fs.readFileSync(schema.path));
+        let scripts = '';
+        if (jsonSchema.references) {
+            jsonSchema.references.forEach((reference)=> {
+                let script = references.referenceType(reference.relation).getQuery(jsonSchema.title, reference);
+                scripts += script;
+            });
+        }
+        this.scripts += scripts;
+    }
+
+    runScripts() {
+        this.db.exec(this.scripts);
+    }
 }
-
-
 
 module.exports = Database;
 

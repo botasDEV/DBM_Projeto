@@ -2,4 +2,4 @@ CREATE TABLE IF NOT EXISTS {{tableName}} (
     {{#columnsData}}
     {{name}} {{type}} {{required}} {{unique}} {{#primaryKey}}PRIMARY KEY AUTOINCREMENT{{/primaryKey}} {{{constraint}}}{{#needComa}},{{/needComa}}
     {{/columnsData}}
-)
+);

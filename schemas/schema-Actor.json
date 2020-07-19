@@ -1,31 +1,31 @@
 {
-    "title": "Artist",
-    "description": "Entity Artist",
+    "title": "Actor",
+    "description": "Entity Actor",
     "type": "object",
     "properties": {
         "id": {
             "type": "integer",
-            "description": "Artist's ID",
+            "description": "Actor's ID",
             "unique": true,
             "primary_key": true
         },
         "name": {
             "type": "string",
-            "description": "Artist's Name",
+            "description": "Actor's Name",
             "faker": "name.findName",
             "maxLength": 50,
             "unique": false
         },
         "birthdate": {
             "type": "integer",
-            "description": "Artist's Birthdate",
+            "description": "Actor's Birthdate",
             "faker": "random.number",
             "maximum": "strftime('%s', datetime('now'))", 
             "unique": false
         },
         "date_death": {
             "type": "integer",
-            "description": "Artist's Date of Death",
+            "description": "Actor's Date of Death",
             "faker": "random.number",
             "minimum": "birthdate",
             "maximum": "strftime('%s', datetime('now'))",

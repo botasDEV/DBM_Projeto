@@ -9,28 +9,32 @@ const databaseGenerator = require('./database/generate-database.js');
 const apiGenerator = require('./api-restful/generate-api.js');
 
 router.post('/generate', (req, res) => {
-    var configs = req.configs;
-    try {
-         serverGenerator(configs.appServer);
-         apiGenerator(configs.schemas);
-         let database = new databaseGenerator(configs.database.title);
-         
-         configs.schemas.forEach(schema => {
+   var configs = req.configs;
 
-            fs.copyFileSync(schema.path, 'Publish/Schemas/'.concat(schema.path.substring(schema.path.lastIndexOf('/'))));
-            classGenerator(schema, database.dbName);
+   try {
+      serverGenerator(configs.appServer);
+      apiGenerator(configs.schemas);
+      let database = new databaseGenerator(configs.database.title);
+      
+      configs.schemas.forEach(schema => {
 
-            database.createTable(schema);
-         });
+         fs.copyFileSync(schema.path, 'Publish/Schemas/'.concat(schema.path.substring(schema.path.lastIndexOf('/'))));
+         classGenerator(schema, database.dbName);
 
-         database.close();
-         res.json('ok');
-     }
-     catch (e) {
-        console.log(e);
-        res.statusMessage = e.message;
-        res.status(500).end();
-     }
+         database.createTable(schema);
+         database.setReferences(schema);
+      });
+
+      database.runScripts();
+      
+      database.close();
+      res.json('ok');
+   }
+   catch (e) {
+      console.log(e);
+      res.statusMessage = e.message;
+      res.status(500).end();
+   }
 });
 
 module.exports = router;

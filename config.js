@@ -14,10 +14,10 @@ module.exports =  {
         ]
     },
     schemas : [
-        { path: './schemas/schema-Album.json'},
-        { path: './schemas/schema-Artist.json'},
+        { path: './schemas/schema-Actor.json'},
+        { path: './schemas/schema-Director.json'},
         { path: './schemas/schema-Genre.json'},
-        { path: './schemas/schema-Song.json'}
+        { path: './schemas/schema-Movie.json'}
     ],
     database: {
         title: './Publish/Database/project.db'

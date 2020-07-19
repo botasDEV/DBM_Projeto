@@ -1,38 +1,38 @@
 {
-    "title": "Album",
-    "description": "Entity Album",
+    "title": "Movie",
+    "description": "Entity Movie",
     "type": "object",
     "properties": {
         "id": {
             "type": "integer",
-            "description": "Album's ID",
+            "description": "Movie's ID",
             "unique": true,
             "primary_key": true
         },
         "title": {
             "type": "string",
-            "description": "Album's Title",
+            "description": "Movie's Title",
             "maxLength": 50, 
             "unique":false,
             "faker": "random.words"
         },
         "cover": {
             "type": "string",
-            "description": "Album Cover Path",
+            "description": "Movie Cover Path",
             "image": true,
             "unique": true,
             "faker": "random.image"
         },
         "price": {
             "type": "number",
-            "description": "Album's Price",
+            "description": "Movie's Price",
             "minimum": 0,
             "unique": false,
             "faker": "commerce.price"
         },
         "release_date": {
             "type": "integer",
-            "description": "Album's Release",
+            "description": "Movie's Release",
             "minimum": "strftime('%s', datetime('now'))",
             "faker": "random.number",
             "unique": false
@@ -40,7 +40,16 @@
     },
     "required": [
         "title", "cover", "price", "release_date"
-    ]
-    
+    ],
+    "references": [{
+        "model": "Actor",
+        "relation": "M-M"
+    },{
+        "model": "Director",
+        "relation": "1-1"
+    },{
+        "model": "Gender",
+        "relation": "1-M"
+    }]
 
 }

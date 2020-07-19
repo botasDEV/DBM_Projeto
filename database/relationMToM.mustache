@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS {{firstTableName}}_{{secondTableName}} (
+    {{firstTableNameLowerCase}}_{{primaryKey}} INTEGER,
+    {{secondTableNameLowerCase}}_{{primaryKey}} INTEGER,
+    PRIMARY KEY({{firstTableNameLowerCase}}_{{primaryKey}}, {{secondTableNameLowerCase}}_{{primaryKey}})
+    FOREIGN KEY ({{firstTableNameLowerCase}}_{{primaryKey}}) REFERENCES {{firstTableName}}({{primaryKey}}),
+    FOREIGN KEY ({{secondTableNameLowerCase}}_{{primaryKey}}) REFERENCES {{secondTableName}}({{primaryKey}})
+);
+

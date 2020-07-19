@@ -1,0 +1,4 @@
+ALTER TABLE {{tableName}} ADD COLUMN {{relatedTableLowerCase}}_{{primaryKey}} INTEGER REFERENCES {{relatedTable}}({{primaryKey}});
+
+CREATE UNIQUE INDEX {{indexName}} ON {{tableName}}({{primaryKey}});
+
