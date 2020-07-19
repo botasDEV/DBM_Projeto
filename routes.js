@@ -7,6 +7,7 @@ const serverGenerator = require('./server/server-generator.js');
 const classGenerator = require('./models/generate-class.js');
 const databaseGenerator = require('./database/generate-database.js');
 const apiGenerator = require('./api-restful/generate-api.js');
+const backofficeGenerator = require('./backoffice/generate-backoffice.js');
 
 router.post('/generate', (req, res) => {
    var configs = req.configs;
@@ -14,6 +15,8 @@ router.post('/generate', (req, res) => {
    try {
       serverGenerator(configs.appServer);
       apiGenerator(configs.schemas);
+      backofficeGenerator(configs.schemas);
+      
       let database = new databaseGenerator(configs.database.title);
       
       configs.schemas.forEach(schema => {

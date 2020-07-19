@@ -13,7 +13,7 @@ router.post('/{{title}}/random/:times', (req, res) => {
     let objTimes = req.params.times;
     
     for (let i = 0; i < objTimes; i++) {
-        {{title}}.create().save(msg => (i == objTimes - 1 ? res.json(msg) : console.log(i + '/' + objTimes) ));
+        {{title}}.create().save(msg => console.log(msg));
     }
 });
 

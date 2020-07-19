@@ -29,9 +29,7 @@ class Database {
             }
             console.log('Connected to SQLite Database');
         });
-    };
-
-    
+    };    
 
     close() {
         this.db.close((err) => {

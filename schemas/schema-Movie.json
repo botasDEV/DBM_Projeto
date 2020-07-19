@@ -31,10 +31,9 @@
             "faker": "commerce.price"
         },
         "release_date": {
-            "type": "integer",
+            "type": "string",
             "description": "Movie's Release",
-            "minimum": "strftime('%s', datetime('now'))",
-            "faker": "random.number",
+            "faker": "date.past",
             "unique": false
         }
     },

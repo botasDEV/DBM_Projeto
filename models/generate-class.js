@@ -23,7 +23,7 @@ module.exports = (schemaPath, dbPath) => {
         if (!isPrimaryKey) {
             arguments.push(utils.toCamelCase(prop));
             argumentsAssigns.push({'name': utils.toCamelCase(prop)});
-            propertiesUpdateInsert.push({'name': utils.toCamelCase(prop), 'comma': (index < propertiesKeys.length -1 ? ',' : '')});
+            propertiesUpdateInsert.push({'name': prop, 'comma': (index < propertiesKeys.length -1 ? ',' : '')});
             questionMarks.push({'symbol': '?', 'comma':  (index < propertiesKeys.length -1 ? ',' : '')});
         }
 

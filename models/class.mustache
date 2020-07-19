@@ -20,10 +20,6 @@ class {{classTitle}} {
         return Object.assign(new {{classTitle}}(), jsf.generate(schema{{classTitle}}));
     }
 
-    static create() {
-        return Object.assign(new {{classTitle}}(), jsf.generate(schema{{classTitle}}));
-    }
-
     static all(callback) {
         database.where("SELECT * FROM {{classTitle}}", [], {{classTitle}}, callback);
     }
@@ -31,14 +27,26 @@ class {{classTitle}} {
     save(callback) {
         let query = "";
         let propertiesJoin = "";
-        if (this.{{primaryKey}}) {
+        let update = false;
+
+        {{classTitle}}.all(item => {
+            if (!this.{{primaryKey}}) return;
+            else if (item.{{primaryKey}} == this.{{primaryKey}}) {
+                update = true;
+                return;
+            }
+        });
+
+
+        if (update) {
             query = "UPDATE {{classTitle}} SET {{#propertiesUpdateJoin}}{{{name}}} = ?{{{comma}}}{{/propertiesUpdateJoin}} WHERE {{primaryKey}} = ?";
             propertiesJoin = [{{#propertiesUpdateJoin}}this.{{{name}}}{{{comma}}}{{/propertiesUpdateJoin}}];
         } else {
             query = "INSERT INTO {{classTitle}} ({{#propertiesUpdateJoin}}{{{name}}}{{{comma}}}{{/propertiesUpdateJoin}}) VALUES({{#questionMark}}{{{symbol}}}{{{comma}}}{{/questionMark}})";
             propertiesJoin = [{{#propertiesInsertJoin}}this.{{{name}}}{{{comma}}}{{/propertiesInsertJoin}}];
         }
-        
+        console.log(query);
+        console.log(propertiesJoin);
         database.run(query,propertiesJoin,callback);
     }
 

@@ -1,0 +1,22 @@
+const express = require('express');
+var router = express.Router();
+
+{{#schemas}}
+var {{title}} = require('../Models/{{title}}.js');
+
+router.get('/{{title}}', (req, res) => {
+    {{title}}.all((rows)=>{
+        res.render('list', {
+            pageTitle: '{{title}}',
+            headers: Object.keys(new {{title}}()),
+            rows: rows.map((row) => {
+                return {
+                    data: Object.keys(row).map(key => row[key])
+                };
+            })
+        });
+    });
+});
+
+module.exports = router;
+{{/schemas}}

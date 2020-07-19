@@ -10,6 +10,10 @@ module.exports =  {
             {
                 originalPath: 'database/sqlite-wrapper.js',
                 destinationPath: 'Publish/Database/sqlite-wrapper.js'
+            },
+            {
+                originalPath: 'backoffice/list.mustache',
+                destinationPath: 'Publish/Views/list.mustache'
             }
         ]
     },

@@ -2,9 +2,16 @@ var express = require("express");
 var app = express();
 const bodyParser = require('body-parser');
 const api = require('./Controllers/api.js');
+const mustacheExpress = require('mustache-express');
+const backoffice = require('./Views/backoffice.js');
+
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache');
+app.set('views', __dirname + '/Views');
 
 app.use(bodyParser.json());
 app.use('/api', api);
+app.use('/backoffice', backoffice);
 
 var server = app.listen({{{port}}}, '{{{host}}}', () => {
     var host = server.address().address === "::" ? "localhost" : server.address().address;

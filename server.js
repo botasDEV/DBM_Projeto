@@ -4,7 +4,6 @@ const routes = require('./routes.js');
 module.exports = (config = null)=> {
     if (!config) throw 'Config cannot be null';
     
-    // Start Server
     var app = express();
 
     app.use((req, res, next) => {

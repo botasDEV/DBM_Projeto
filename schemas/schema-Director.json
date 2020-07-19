@@ -17,18 +17,18 @@
             "unique": false
         },
         "birthdate": {
-            "type": "integer",
+            "type": "string",
             "description": "Director's Birthdate",
-            "faker": "random.number",
-            "maximum": "strftime('%s', datetime('now'))", 
+            "faker": "date.past",
+            "maximum": "date('now')", 
             "unique": false
         },
         "date_death": {
-            "type": "integer",
+            "type": "string",
             "description": "Director's Date of Death",
-            "faker": "random.number",
+            "faker": "date.past",
             "minimum": "birthdate",
-            "maximum": "strftime('%s', datetime('now'))",
+            "maximum": "date('now')",
             "unique": false
         }
         
