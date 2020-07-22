@@ -14,6 +14,10 @@ class {{classTitle}} {
         {{#classEnumerables}}
             Object.defineProperty(this, "{{name}}", {enumerable: false{{#writable}}, writable: true{{/writable}} });
         {{/classEnumerables}}
+
+        {{#references}}
+            Object.defineProperty(this, "{{name}}_id", {enumerable: false, writable: true });
+        {{/references}}
     }
 
     static create() {
@@ -37,7 +41,6 @@ class {{classTitle}} {
             }
         });
 
-
         if (update) {
             query = "UPDATE {{classTitle}} SET {{#propertiesUpdateJoin}}{{{name}}} = ?{{{comma}}}{{/propertiesUpdateJoin}} WHERE {{primaryKey}} = ?";
             propertiesJoin = [{{#propertiesUpdateJoin}}this.{{{name}}}{{{comma}}}{{/propertiesUpdateJoin}}];
@@ -45,17 +48,24 @@ class {{classTitle}} {
             query = "INSERT INTO {{classTitle}} ({{#propertiesUpdateJoin}}{{{name}}}{{{comma}}}{{/propertiesUpdateJoin}}) VALUES({{#questionMark}}{{{symbol}}}{{{comma}}}{{/questionMark}})";
             propertiesJoin = [{{#propertiesInsertJoin}}this.{{{name}}}{{{comma}}}{{/propertiesInsertJoin}}];
         }
-        console.log(query);
-        console.log(propertiesJoin);
+        
         database.run(query,propertiesJoin,callback);
     }
 
-    static get({{primaryKey}}, callback) {
-        database.where("SELECT * FROM {{classTitle}} WHERE {{primaryKey}} = ?", [{{primaryKey}}], {{classTitle}}, callback)
+    static get(id, callback) {
+        database.where("SELECT * FROM {{classTitle}} WHERE {{primaryKey}} = ?", [id], {{classTitle}}, callback)
     }
 
-    static delete({{primaryKey}}, callback) {
-        database.run("DELETE FROM {{classTitle}} WHERE {{primaryKey}} = ?", [{{primaryKey}}], callback)
+    static delete(id, callback) {
+        database.run("DELETE FROM {{classTitle}} WHERE {{primaryKey}} = ?", [id], callback)
+    }
+
+    static many(model, id, callback) {
+        let tableName = "{{classTitle}}".localCompare(model) === -1 ? "{{classTitle}}_" + model : model + "_{{table}}";
+        database.where(`SELECT {{classTitle}}.*
+            FROM {{classTitle}}
+            INNER JOIN ${tableName} ON ${tableName}.{{table}}_id = {{classTitle}}.id
+            WHERE ${tableName}.${model.toLowerCase()}_id = ?`, [id], {{classTitle}}, callback);
     }
 }
 

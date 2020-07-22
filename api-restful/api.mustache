@@ -5,15 +5,27 @@ var router = express.Router();
 var {{title}} = require('../Models/{{title}}.js');
 
 router.post('/{{title}}', (req, res) => {
-    let obj = Object.assign(new {{title}}(), req.body);
-    obj.save(msg => res.json(msg));
+    try {
+        let obj = Object.assign(new {{title}}(), req.body);
+        obj.save(msg => res.json(msg));
+        res.json('ok');
+    } catch (e) {
+        console.log(e);
+        res.statusCode(500).end();
+    }
 });
 
 router.post('/{{title}}/random/:times', (req, res) => {
-    let objTimes = req.params.times;
-    
-    for (let i = 0; i < objTimes; i++) {
-        {{title}}.create().save(msg => console.log(msg));
+    try {
+        let objTimes = req.params.times;
+        
+        for (let i = 0; i < objTimes; i++) {
+            {{title}}.create().save(msg => console.log(msg));
+        }
+        res.json('ok');
+    } catch (e) {
+        console.log(e);
+        res.statusCode(500).end();
     }
 });
 
@@ -37,6 +49,10 @@ router.delete('/{{title}}/:id', (req, res) => {
     let id = req.params.id;
 
     {{title}}.delete(id, msg => res.json(msg));
+});
+
+router.get('/{{title}}/:model/:id', (req, res) => {
+    {{title}}.many(req.params.model, req.params.id, rows => res.json(rows));
 });
 
 module.exports = router;

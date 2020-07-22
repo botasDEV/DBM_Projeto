@@ -1,15 +1,43 @@
+const isUrl = require('is-url');
+const fileType = require('file-type');
+const got = require('got');
+const moment = require('momentjs');
+
+const MONEY_KEYS = ["price", "money", "cost", "euro", "value"]; 
+
 class Utils {
 
-    // Transforms any snake_case or kebab-case to camelCase
-    static toCamelCase(str) {
-        if (typeof str !== 'string') throw 'The argument STR must be a STRING';
+    static isImageUrl(url) {
+        if (!isUrl(url)) return false;
+        return (async () => {
+            try {
+                const stream = got.stream(url);
+                const type = await fileType.fromStream(stream);
+                return type.mime.includes("image");
+            } catch(e) {
+                return false;
+            }
+        })();
+    }
 
-        return str.replace(
-            /([-_][a-z])/g,
-            (group) => group.toUpperCase()
-                            .replace('-', '')
-                            .replace('_', '')
-        );
+    static formatValue(key, value) {
+        if (Utils.isDate(value)) {
+            return (moment(value)).format("DD-MM-YYYY");
+        }
+
+        if(Utils.isMoney(key, value)) {
+            return value.toString().concat("€");
+        }
+
+        return value;
+    }
+
+    static isDate(value) {
+        return ((typeof value) == "string" && !((new Date(value)).toString().includes("Invalid Date")));
+    }
+
+    static isMoney(key, value) {
+        return (!isNaN(value) && MONEY_KEYS.includes(key));
     }
 }
 

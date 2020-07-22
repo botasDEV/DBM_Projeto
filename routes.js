@@ -9,6 +9,11 @@ const databaseGenerator = require('./database/generate-database.js');
 const apiGenerator = require('./api-restful/generate-api.js');
 const backofficeGenerator = require('./backoffice/generate-backoffice.js');
 
+app.use((req, res, next) => {
+   res.set('Cache-Control', 'no-store')
+   next()
+ });
+
 router.post('/generate', (req, res) => {
    var configs = req.configs;
 

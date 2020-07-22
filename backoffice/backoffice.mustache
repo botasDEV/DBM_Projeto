@@ -1,20 +1,43 @@
 const express = require('express');
+const utils = require('../utils');
 var router = express.Router();
+
 
 {{#schemas}}
 var {{title}} = require('../Models/{{title}}.js');
 
 router.get('/{{title}}', (req, res) => {
+    let data{{title}} = [];
+    let emptyTxt = ["Listagem vazia.\nClique no botão em baixo para adicionar um {{title}}."];
+    
     {{title}}.all((rows)=>{
-        res.render('list', {
-            pageTitle: '{{title}}',
-            headers: Object.keys(new {{title}}()),
-            rows: rows.map((row) => {
-                return {
-                    data: Object.keys(row).map(key => row[key])
-                };
-            })
+        emptyTxt = [];
+        rows.map((row) => {
+            let itemData = {};
+            let data = [];
+            Object.keys(row).forEach((key) => {
+                let value = row[key];
+                if (value && utils.isImageUrl(value)) {
+                    itemData.imageUrl = value;
+                    itemData.imageCaption = key.toUpperCase().replace("_", " ");
+                } else if (value) {
+                    data.push({
+                        key: key.toUpperCase().replace("_", " "),
+                        value: utils.formatValue(key, value)
+                    });
+                }
+            });
+            itemData.data = data;
+            data{{title}}.push({
+                item: itemData
+            });
         });
+    });
+    
+    res.render('list', {
+        pageTitle: '{{title}}',
+        data: data{{title}},
+        empty: emptyTxt
     });
 });
 

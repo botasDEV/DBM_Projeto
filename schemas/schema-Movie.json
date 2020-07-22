@@ -38,7 +38,7 @@
         }
     },
     "required": [
-        "title", "cover", "price", "release_date"
+        "title", "cover", "release_date"
     ],
     "references": [{
         "model": "Actor",
@@ -50,5 +50,4 @@
         "model": "Gender",
         "relation": "1-M"
     }]
-
 }

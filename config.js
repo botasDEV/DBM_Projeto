@@ -8,6 +8,18 @@ module.exports =  {
         target: 'Publish/server.js',
         staticFiles: [
             {
+                originalPath: 'utils.js',
+                destinationPath: 'Publish/utils.js'
+            },
+            {
+                originalPath: 'style/backoffice.css',
+                destinationPath: 'Publish/Public/Css/backoffice.css'
+            },
+            {
+                originalPath: 'images/add.png',
+                destinationPath: 'Publish/Public/Images/add.png'
+            },
+            {
                 originalPath: 'database/sqlite-wrapper.js',
                 destinationPath: 'Publish/Database/sqlite-wrapper.js'
             },

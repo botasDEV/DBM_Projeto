@@ -35,7 +35,9 @@
     },
     "required": [
         "name","birthdate"
-    ]
-    
-
+    ],
+    "references": [{
+        "model": "Movie",
+        "relation": "M-M"
+    }]
 }
