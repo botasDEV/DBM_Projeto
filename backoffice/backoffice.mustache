@@ -2,24 +2,28 @@ const express = require('express');
 const utils = require('../utils');
 var router = express.Router();
 
-
 {{#schemas}}
 var {{title}} = require('../Models/{{title}}.js');
+var schema{{title}} = require('../Schemas/Schema-{{title}}.json');
 
 router.get('/{{title}}', (req, res) => {
-    let data{{title}} = [];
-    let emptyTxt = ["Listagem vazia.\nClique no botão em baixo para adicionar um {{title}}."];
+    
     
     {{title}}.all((rows)=>{
-        emptyTxt = [];
+        let data{{title}} = [];
+        let rendered = {};
+        let emptyTxt = ["Listagem vazia. Clique no botão em baixo para adicionar um {{title}}."];
         rows.map((row) => {
             let itemData = {};
+            itemData.image = [];
             let data = [];
             Object.keys(row).forEach((key) => {
                 let value = row[key];
                 if (value && utils.isImageUrl(value)) {
-                    itemData.imageUrl = value;
-                    itemData.imageCaption = key.toUpperCase().replace("_", " ");
+                    itemData.image.push({
+                        imageUrl: value,
+                        imageCaption: key.toUpperCase().replace("_", " ") 
+                    });
                 } else if (value) {
                     data.push({
                         key: key.toUpperCase().replace("_", " "),
@@ -27,19 +31,66 @@ router.get('/{{title}}', (req, res) => {
                     });
                 }
             });
+
+            itemData.actions =  {
+                item: [{
+                    link: './Details/' + row.id,
+                    image: { class: 'action', src: '../../images/read.png', alt: 'read' },
+                    tooltip: 'Details'
+                }, {
+                    link: './Edit/' + row.id,
+                    image: { class: 'action', src: '../../images/edit.png', alt: 'edit' },
+                    tooltip: 'Edit'
+                }, {
+                    link: '#',
+                    image: { class: 'action',  src: '../../images/delete.png', alt: 'delete'},
+                    tooltip: 'Delete',
+                    events: [{
+                        name: "onclick",
+                        function: "remove",
+                        args: row.id
+                    }]
+                }]
+            };
             itemData.data = data;
             data{{title}}.push({
                 item: itemData
             });
         });
-    });
-    
-    res.render('list', {
-        pageTitle: '{{title}}',
-        data: data{{title}},
-        empty: emptyTxt
+        if (data{{title}}.length > 0) {
+            emptyTxt = [];
+        } 
+
+        res.render('list', {
+            pageTitle: '{{title}}',
+            data: data{{title}},
+            empty: emptyTxt
+        });
     });
 });
 
-module.exports = router;
+router.get('/{{title}}/Details/:id', (req, res) => {
+    {{title}}.get(req.params.id, (row) => {
+        res.render('details', {
+            properties: ()=>{
+                var allProps = Object.getOwnPropertyNames(row);
+                var validProps = [];
+                allProps.forEach((prop) => {
+                    
+                    if (schema{{title}}.properties.hasOwnProperty(prop) && !schema{{title}}.properties[prop].primary_key) {
+                        
+                        validProps.push({
+                            name: prop,
+                            value: row[prop]
+                        });
+                    }
+                });
+                
+                return validProps;
+            }
+        });
+    });
+});
+
 {{/schemas}}
+module.exports = router;

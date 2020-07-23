@@ -28,3 +28,8 @@ td > img {
     bottom:20;
     right:20;
 }
+
+.action {
+    width: 30px;
+    margin: 10px;
+}

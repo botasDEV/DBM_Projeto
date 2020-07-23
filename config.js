@@ -12,12 +12,12 @@ module.exports =  {
                 destinationPath: 'Publish/utils.js'
             },
             {
-                originalPath: 'style/backoffice.css',
-                destinationPath: 'Publish/Public/Css/backoffice.css'
+                originalPath: 'style',
+                destinationPath: 'Publish/Public/Css'
             },
             {
-                originalPath: 'images/add.png',
-                destinationPath: 'Publish/Public/Images/add.png'
+                originalPath: 'images',
+                destinationPath: 'Publish/Public/Images'
             },
             {
                 originalPath: 'database/sqlite-wrapper.js',
@@ -26,6 +26,10 @@ module.exports =  {
             {
                 originalPath: 'backoffice/list.mustache',
                 destinationPath: 'Publish/Views/list.mustache'
+            },
+            {
+                originalPath: 'backoffice/details.mustache',
+                destinationPath: 'Publish/Views/details.mustache'
             }
         ]
     },

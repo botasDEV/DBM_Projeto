@@ -21,8 +21,8 @@ class Utils {
     }
 
     static formatValue(key, value) {
-        if (Utils.isDate(value)) {
-            return (moment(value)).format("DD-MM-YYYY");
+        if (key == "date" || Utils.isDate(value)) {
+            return (moment(value)).format("YYYY-MM-DD");
         }
 
         if(Utils.isMoney(key, value)) {

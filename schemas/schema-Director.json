@@ -20,15 +20,17 @@
             "type": "string",
             "description": "Director's Birthdate",
             "faker": "date.past",
-            "maximum": "date('now')", 
+            "conversion": "date",
+            "maximum": "date()", 
             "unique": false
         },
         "date_death": {
             "type": "string",
             "description": "Director's Date of Death",
             "faker": "date.past",
+            "conversion": "date",
             "minimum": "birthdate",
-            "maximum": "date('now')",
+            "maximum": "date()",
             "unique": false
         }
         

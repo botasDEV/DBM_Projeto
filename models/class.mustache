@@ -1,7 +1,9 @@
 const database = require('../Database/sqlite-wrapper.js')('{{{dbPath}}}');
 const jsf = require('json-schema-faker');
+const utils = require('../utils');
 const faker = require('faker');
 jsf.extend('faker', ()=> {return faker});
+jsf.format('pastDate', ()=> faker.date.past());
 
 const schema{{classTitle}} = require('../Schemas/schema-{{classTitle}}.json');
 
@@ -21,7 +23,17 @@ class {{classTitle}} {
     }
 
     static create() {
-        return Object.assign(new {{classTitle}}(), jsf.generate(schema{{classTitle}}));
+        let obj = Object.assign(new {{classTitle}}(), jsf.generate(schema{{classTitle}}));
+        
+        Object.keys(schema{{classTitle}}.properties).forEach(propKey => {
+            Object.keys(obj).forEach(objKey => {
+                if (propKey.localeCompare(objKey) == 0 && 'conversion' in schema{{classTitle}}.properties[propKey]) {
+                   obj[objKey] = utils.formatValue(schema{{classTitle}}.properties[propKey].conversion, obj[objKey]);
+                }
+            });
+        });
+        console.log(obj);
+        return obj;
     }
 
     static all(callback) {
@@ -53,7 +65,7 @@ class {{classTitle}} {
     }
 
     static get(id, callback) {
-        database.where("SELECT * FROM {{classTitle}} WHERE {{primaryKey}} = ?", [id], {{classTitle}}, callback)
+        database.get("SELECT * FROM {{classTitle}} WHERE {{primaryKey}} = ?", [id], {{classTitle}}, callback)
     }
 
     static delete(id, callback) {
@@ -61,7 +73,7 @@ class {{classTitle}} {
     }
 
     static many(model, id, callback) {
-        let tableName = "{{classTitle}}".localCompare(model) === -1 ? "{{classTitle}}_" + model : model + "_{{table}}";
+        let tableName = "{{classTitle}}" == model ? "{{classTitle}}_" + model : model + "_{{table}}";
         database.where(`SELECT {{classTitle}}.*
             FROM {{classTitle}}
             INNER JOIN ${tableName} ON ${tableName}.{{table}}_id = {{classTitle}}.id

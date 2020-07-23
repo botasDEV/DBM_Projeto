@@ -2,17 +2,14 @@ var express = require("express");
 var app = express();
 const bodyParser = require('body-parser');
 const api = require('./Controllers/api.js');
-const mustacheExpress = require('mustache-express');
+const mustacheExpress = require('mustache-express')();
 const backoffice = require('./Views/backoffice.js');
 
-app.engine('mustache', mustacheExpress());
+app.engine('mustache', mustacheExpress);
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/Views');
-app.set('etag', false);
-app.use((req, res, next) => {
-  res.set('Cache-Control', 'no-store')
-  next()
-});
+
+console.log(__dirname + '/Public/Css');
 app.use('/css', express.static(__dirname + '/Public/Css'));
 app.use('/js', express.static(__dirname + '/Public/Js'));
 app.use('/images', express.static(__dirname + '/Public/Images'));
