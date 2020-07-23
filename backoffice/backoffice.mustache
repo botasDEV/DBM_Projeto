@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('momentjs');
 const utils = require('../utils');
 var router = express.Router();
 
@@ -22,11 +23,11 @@ router.get('/{{title}}', (req, res) => {
                 if (value && utils.isImageUrl(value)) {
                     itemData.image.push({
                         imageUrl: value,
-                        imageCaption: key.toUpperCase().replace("_", " ") 
+                        imageCaption: utils.formatValue("", key) 
                     });
                 } else if (value) {
                     data.push({
-                        key: key.toUpperCase().replace("_", " "),
+                        key: utils.formatValue("", key),
                         value: utils.formatValue(key, value)
                     });
                 }
@@ -34,11 +35,17 @@ router.get('/{{title}}', (req, res) => {
 
             itemData.actions =  {
                 item: [{
-                    link: './Details/' + row.id,
+                    link: '#',
+                    modal: {
+                        link: '{{title}}/Details/' + row.id,
+                    },
                     image: { class: 'action', src: '../../images/read.png', alt: 'read' },
                     tooltip: 'Details'
                 }, {
-                    link: './Edit/' + row.id,
+                    link: '#',
+                    modal: {
+                        link: '{{title}}/Edit/' + row.id,
+                    },
                     image: { class: 'action', src: '../../images/edit.png', alt: 'edit' },
                     tooltip: 'Edit'
                 }, {
@@ -64,13 +71,21 @@ router.get('/{{title}}', (req, res) => {
         res.render('list', {
             pageTitle: '{{title}}',
             data: data{{title}},
-            empty: emptyTxt
+            empty: emptyTxt,
+            addButton: {
+                link: "#",
+                modal: {
+                    link: "{{title}}/Insert",
+                },
+            }
         });
     });
 });
 
 router.get('/{{title}}/Details/:id', (req, res) => {
+    
     {{title}}.get(req.params.id, (row) => {
+        
         res.render('details', {
             properties: ()=>{
                 var allProps = Object.getOwnPropertyNames(row);
@@ -80,7 +95,8 @@ router.get('/{{title}}/Details/:id', (req, res) => {
                     if (schema{{title}}.properties.hasOwnProperty(prop) && !schema{{title}}.properties[prop].primary_key) {
                         
                         validProps.push({
-                            name: prop,
+                            pageTitle: "{{title}} Details",
+                            name: utils.formatValue("", prop),
                             value: row[prop]
                         });
                     }
@@ -91,6 +107,103 @@ router.get('/{{title}}/Details/:id', (req, res) => {
         });
     });
 });
+
+router.get('/{{title}}/Insert', (req, res) => {
+    res.render('insert', {
+        pageTitle: "Add {{title}}",
+        properties: () => {
+            var allProps = Object.getOwnPropertyNames(new {{title}}());
+            var validProps = [];
+
+            allProps.forEach((prop) => {
+                if (schema{{title}}.properties.hasOwnProperty(prop) && !schema{{title}}.properties[prop].primary_key) {
+                    validProps.push({
+                        name: utils.formatValue("",prop),
+                        type: ()=> {
+                            if (schema{{title}}.properties[prop].type == 'number' || schema{{title}}.properties[prop].type == 'integer') {
+                                return "number";
+                            }
+                            if (schema{{title}}.properties[prop].image) {
+                                return "file";
+                            }
+
+                            if (schema{{title}}.properties[prop].conversion == "date") {
+                                return "date";
+                            }
+
+                            return "text";
+                        },
+                        required: () => {
+                            return schema{{title}}.required.includes(prop);
+                        },
+                        constraints: () => {
+                            let constraints = [];
+                            let types = {
+                                minimum: "min",
+                                maximum: "max",
+                                minLength: "minLength",
+                                maxLength: "maxLength",
+                                image: "file"
+                            };
+                            Object.keys(types).forEach((constraint) => {
+                                if(schema{{title}}.properties[prop][constraint] !== undefined) {
+                                    let value = schema{{title}}.properties[prop][constraint];
+                                    constraint = (schema{{title}}.properties[prop].image ? "image" : constraint);
+                                    
+                                    if (schema{{title}}.properties[prop].conversion == "date") {
+                                        value = moment().format("YYYY-MM-DD");
+                                    }
+
+                                    if (schema{{title}}.properties[prop].image) {
+                                        constraints.push({
+                                            name: "accept",
+                                            value: "image/*"
+                                        });    
+                                    }
+
+                                    constraints.push({
+                                        name: types[constraint],
+                                        value: value
+                                    });
+                                }
+                            });
+                            return constraints;
+                        }
+                    });
+                }
+            });
+
+            
+            return validProps;
+        }
+    });
+});
+
+/*router.get('/{{title}}/Edit/:id', (req, res) => {
+    
+    {{title}}.get(req.params.id, (row) => {
+        
+        res.render('details', {
+            properties: ()=>{
+                var allProps = Object.getOwnPropertyNames(row);
+                var validProps = [];
+                allProps.forEach((prop) => {
+                    
+                    if (schema{{title}}.properties.hasOwnProperty(prop) && !schema{{title}}.properties[prop].primary_key) {
+                        
+                        validProps.push({
+                            pageTitle: "{{title}} Details",
+                            name: utils.formatValue("", prop),
+                            value: row[prop]
+                        });
+                    }
+                });
+                
+                return validProps;
+            }
+        });
+    });
+});*/
 
 {{/schemas}}
 module.exports = router;

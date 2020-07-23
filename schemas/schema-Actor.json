@@ -29,7 +29,6 @@
             "description": "Actor's Date of Death",
             "faker": "date.past",
             "conversion": "date",
-            "minimum": "birthdate",
             "maximum": "date()",
             "unique": false
         }

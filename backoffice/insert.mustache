@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <h2>{{pageTitle}}</h2>
+        <form method="Post" onsubmit="add(); return false;">
+            {{#properties}}
+            <div class="form-group">
+                <label for="{{name}}">{{name}}:</label>
+                <input type="{{type}}" class="form-control" id="{{name}}" name="{{name}}" {{#constraints}} {{name}}="{{value}}" {{/constraints}} {{#required}}required{{/required}}></input>
+            </div>
+            {{/properties}}
+            <input type="submit" value="Save" />
+        </form>
+    </body>
+    <script>
+        function add() {
+            
+        }
+    </script>
+</html>

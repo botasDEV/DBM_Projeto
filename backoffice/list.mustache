@@ -1,9 +1,10 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>{{pageTitle}}</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="../../css/backoffice.css">
     </head>
     <body>
@@ -28,7 +29,7 @@
                 {{#actions}}
                 <td>
                     {{#item}}
-                    <a href="{{link}}" title="{{tooltip}}" {{#events}}{{name}}="javascript:{{function}}({{args}})" {{/events}}>
+                    <a href="{{link}}" title="{{tooltip}}" {{#modal}}onclick="loadModal('{{link}}')"{{/modal}} {{#events}}{{name}}="javascript:{{function}}({{args}})" {{/events}}>
                         {{#image}}
                         <img class="{{class}}" src="{{src}}" alt="{{alt}}" />
                         {{/image}}
@@ -43,6 +44,30 @@
         {{#empty}}
             <p class="listEmpty">{{.}}</p>
         {{/empty}}
-        <div class="add"></div>
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
+        </div>
+        {{#addButton}}
+        <a href="#" {{#modal}}onclick="loadModal('{{link}}')"{{/modal}}>
+            <div class="add"></div>
+        </a>
+        {{/addButton}}
     </body>
+
+    <script>
+        $(".modal").on("hidden.bs.modal", function(){
+            $(".modal-content").html("");
+        });
+
+        function loadModal(url) {
+            $.get(url, (data) => {
+               $(".modal-content").html(data);
+               $("#myModal").modal('show');
+            });
+            return false;
+        }
+    </script>
 </html>

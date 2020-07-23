@@ -29,6 +29,10 @@ class Utils {
             return value.toString().concat("€");
         }
 
+        if (typeof value == "string") {
+            return value.toUpperCase().replace("_", " ");
+        }
+
         return value;
     }
 

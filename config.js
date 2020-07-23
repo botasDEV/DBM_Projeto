@@ -30,6 +30,10 @@ module.exports =  {
             {
                 originalPath: 'backoffice/details.mustache',
                 destinationPath: 'Publish/Views/details.mustache'
+            },
+            {
+                originalPath: 'backoffice/insert.mustache',
+                destinationPath: 'Publish/Views/insert.mustache'
             }
         ]
     },
