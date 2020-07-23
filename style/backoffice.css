@@ -38,3 +38,7 @@ td > img {
 .modal-content {
     padding: 50px;
 }
+
+.modal-content label {
+    width: 165px;
+}

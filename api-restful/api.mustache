@@ -6,9 +6,9 @@ var {{title}} = require('../Models/{{title}}.js');
 
 router.post('/{{title}}', (req, res) => {
     try {
+        console.log(req.body);
         let obj = Object.assign(new {{title}}(), req.body);
         obj.save(msg => res.json(msg));
-        res.json('ok');
     } catch (e) {
         console.log(e);
         res.statusCode(500).end();

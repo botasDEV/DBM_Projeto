@@ -1,18 +1,71 @@
 <html>
     <body>
-        <h2>{{pageTitle}}</h2>
-        <form method="Post" onsubmit="add(); return false;">
+        <h2>Add {{pageTitle}}</h2>
+        <form method="Post" id="addForm" onsubmit="add(); return false;">
             {{#properties}}
             <div class="form-group">
-                <label for="{{name}}">{{name}}:</label>
-                <input type="{{type}}" class="form-control" id="{{name}}" name="{{name}}" {{#constraints}} {{name}}="{{value}}" {{/constraints}} {{#required}}required{{/required}}></input>
+                <label for="{{nameLowerCase}}">{{name}}:</label>
+                <input type="{{type}}" class="form-control" name="{{nameLowerCase}}" {{#constraints}} {{name}}="{{value}}" {{/constraints}} {{#required}}required{{/required}}></input>
             </div>
             {{/properties}}
-            <input type="submit" value="Save" />
+            {{#references}}
+            <label>{{model}}:</label>
+            <div id="div{{model}}value" class="form-group"></div>
+            {{/references}}
+            <input type="submit" value="Save" class="btn btn-primary" style="float: right;" />
         </form>
     </body>
     <script>
+        {{#hasReferences}}
+        function loadValues(model, label, controlId, isManyToMany) {
+            $.get('../api/' + model, (data) => {
+                let objects = [];
+                data.forEach((item) => {
+                    objects.push(isManyToMany ? 
+                    "<label><input type='checkbox' name='" + label + "' value='" + item[label] + "' /> " + item[label] + "</label>" : 
+                    "<option value='" + item[label] + "'>" + item[label] + "</option>");  
+                });
+
+                if (!isManyToMany) {
+                    objects.unshift("<option value='null'> Selecione...</option>");
+                    objects.unshift("<select id='" + model.toLowerCase() + "' name='" + model.toLowerCase() + "'>");
+                    objects.push("</select>");
+                }
+
+                $(controlId).append(objects.join(""));
+            });
+        }
+
+        $(document).ready(() => {
+            {{#references}}
+            loadValues('{{model}}','{{label}}','#div{{model}}value', {{isManyToMany}});
+            {{/references}}
+        }); 
+        {{/hasReferences}}
+
+        
         function add() {
+            let payload = {};
+            let inputs = $('#addForm :input[class=form-control]');
+            inputs.each((index, input) => {
+                console.log(input);
+                payload[input.name] = input.value;
+            });
+            
+            $.ajax({
+                type: "POST",
+                url: "../api/{{pageTitle}}",
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                success: (data)=> {
+                    if (!data.success) {
+                        alert("Não foi possível efetuar a operação.")
+                    } else {
+                        location.reload();
+                    }
+                },
+                dataType: "json"
+            });
             
         }
     </script>

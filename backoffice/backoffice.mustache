@@ -103,6 +103,25 @@ router.get('/{{title}}/Details/:id', (req, res) => {
                 });
                 
                 return validProps;
+            },
+            references: () => {
+                let allRefs = [];
+                let refs = schema{{title}}.references;
+                console.log(refs);
+                if (refs) {
+                    refs.forEach((ref) => {
+                        allRefs.push({
+                            labelRef: ref.label,
+                            model: ref.model,
+                            values: ref.relation === "M-M" ?
+                                "/{{title}}/" + req.params.id : row[(ref.model + "_id").toLowerCase()]
+                        });
+                    });
+                }
+                return allRefs;
+            },
+            get hasReferences() {
+                return this.references().length > 0;
             }
         });
     });
@@ -110,7 +129,7 @@ router.get('/{{title}}/Details/:id', (req, res) => {
 
 router.get('/{{title}}/Insert', (req, res) => {
     res.render('insert', {
-        pageTitle: "Add {{title}}",
+        pageTitle: "{{title}}",
         properties: () => {
             var allProps = Object.getOwnPropertyNames(new {{title}}());
             var validProps = [];
@@ -119,6 +138,7 @@ router.get('/{{title}}/Insert', (req, res) => {
                 if (schema{{title}}.properties.hasOwnProperty(prop) && !schema{{title}}.properties[prop].primary_key) {
                     validProps.push({
                         name: utils.formatValue("",prop),
+                        nameLowerCase: prop.toLowerCase(),
                         type: ()=> {
                             if (schema{{title}}.properties[prop].type == 'number' || schema{{title}}.properties[prop].type == 'integer') {
                                 return "number";
@@ -171,10 +191,26 @@ router.get('/{{title}}/Insert', (req, res) => {
                         }
                     });
                 }
-            });
-
-            
+            });            
             return validProps;
+        },
+        references: () => {
+            let allRefs = [];
+            let refs = schema{{title}}.references;
+            
+            if (refs) {
+                refs.forEach((ref) => {
+                    allRefs.push({
+                        label: ref.label,
+                        model: ref.model,
+                        isManyToMany: ref.relation === "M-M"
+                    });
+                });
+            }
+            return allRefs;
+        },
+        get hasReferences() {
+            return this.references().length > 0;
         }
     });
 });
@@ -183,7 +219,7 @@ router.get('/{{title}}/Insert', (req, res) => {
     
     {{title}}.get(req.params.id, (row) => {
         
-        res.render('details', {
+        res.render('edit', {
             properties: ()=>{
                 var allProps = Object.getOwnPropertyNames(row);
                 var validProps = [];

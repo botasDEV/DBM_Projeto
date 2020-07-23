@@ -43,12 +43,15 @@
     ],
     "references": [{
         "model": "Actor",
-        "relation": "M-M"
+        "relation": "M-M",
+        "label": "name"
     },{
         "model": "Director",
-        "relation": "1-1"
+        "relation": "1-1",
+        "label": "name"
     },{
-        "model": "Gender",
-        "relation": "1-M"
+        "model": "Genre",
+        "relation": "1-M",
+        "label": "name"
     }]
 }
