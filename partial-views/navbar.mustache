@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" href="./">Home</a></li>
+        {{#menuItems}}
+            <li class="nav-item"><a class="nav-link" href="{{href}}">{{name}}</a></li>
+        {{/menuItems}}
+    </ul>
+</nav>
+<script>
+    $(document).ready(()=>{
+        $("li.active").removeClass("active")
+        let pathname = document.location.pathname;
+        if (pathname == "/backoffice") {
+            $("li:eq(0)").addClass("active");
+        } else {
+            $("li").each(index => {
+            if ({{#backoffice}}"/backoffice/" +{{/backoffice}} $("li:eq("+index+")").text() == pathname){
+                $("li:eq("+index+")").addClass("active");
+                    return;
+                }
+            });
+        }
+    });
+</script>
