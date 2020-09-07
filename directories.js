@@ -19,8 +19,10 @@ module.exports = (basePath = '') => {
     mkdirp.sync(basePath.concat('Public/Css'));
     mkdirp.sync(basePath.concat('Public/Images'));
     mkdirp.sync(basePath.concat('Public/Js'));
+    mkdirp.sync(basePath.concat('Frontend'));
     mkdirp.sync(basePath.concat('Views'));
     mkdirp.sync(basePath.concat('Schemas'));
     mkdirp.sync(basePath.concat('Database'));
+    
 
 }

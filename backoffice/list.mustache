@@ -48,36 +48,7 @@
                 {{/item}}    
             </div>
         </div>
-        <!--<table>
-            {{#item}}
-            <tr>
-                <td>
-                    {{#image}}
-                    <img src="{{imageUrl}}" alt="{{imageCaption}}" title="{{imageCaption}}" />
-                    {{/image}}
-                </td>
-                <td>
-                    {{#data}}
-                    <p style="text-transform: capitalize;">
-                        <b>{{key}}</b><br/>
-                        {{value}}
-                    </p>
-                    {{/data}}
-                </td>
-                {{#actions}}
-                <td>
-                    {{#item}}
-                    <a href="{{link}}" title="{{tooltip}}" {{#modal}}onclick="loadModal('{{link}}')"{{/modal}} {{#events}}{{name}}="javascript:{{function}}({{args}})" {{/events}}>
-                        {{#image}}
-                        <img class="{{class}}" src="{{src}}" alt="{{alt}}" />
-                        {{/image}}
-                    </a>
-                    {{/item}}
-                </td>
-                {{/actions}}
-            </tr>
-            {{/item}}
-        </table>-->
+        
         {{/data}}
         {{#empty}}
             <p class="listEmpty">{{.}}</p>

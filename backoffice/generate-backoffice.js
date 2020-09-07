@@ -15,5 +15,6 @@ module.exports = (schemasPaths) => {
     };
 
     var output = mustache.render(template, view);
+
     fs.writeFileSync('Publish/Views/backoffice.js', output);
 } 

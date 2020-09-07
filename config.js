@@ -37,6 +37,10 @@ module.exports =  {
             }
         ]
     },
+    frontend: {
+        title: 'Movies NG',
+        port: 4300
+    },
     schemas : [
         { path: './schemas/schema-Actor.json'},
         { path: './schemas/schema-Director.json'},

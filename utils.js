@@ -2,6 +2,7 @@ const isUrl = require('is-url');
 const fileType = require('file-type');
 const got = require('got');
 const moment = require('momentjs');
+const { exec, execSync } = require('child_process');
 
 const MONEY_KEYS = ["price", "money", "cost", "euro", "value"]; 
 
@@ -42,6 +43,14 @@ class Utils {
 
     static isMoney(key, value) {
         return (!isNaN(value) && MONEY_KEYS.includes(key));
+    }
+
+    static exec(command, sync = true) {
+        if (!sync) {
+            exec(command);
+            return;
+        }
+        execSync(command);
     }
 }
 

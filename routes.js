@@ -9,6 +9,7 @@ const databaseGenerator = require('./database/generate-database.js');
 const apiGenerator = require('./api-restful/generate-api.js');
 const backofficeGenerator = require('./backoffice/generate-backoffice.js');
 const partialViewGenerator = require('./partial-views/generate-partial-view.js');
+const frontendGenerator = require('./frontend/generate-frontend');
 
 app.use((req, res, next) => {
    res.set('Cache-Control', 'no-store')
@@ -24,6 +25,7 @@ router.post('/generate', (req, res) => {
       backofficeGenerator(configs.schemas);
       partialViewGenerator(configs.schemas, true);
       partialViewGenerator(configs.schemas);
+      
       let database = new databaseGenerator(configs.database.title);
       
       configs.schemas.forEach(schema => {
@@ -38,6 +40,10 @@ router.post('/generate', (req, res) => {
       database.runScripts();
       
       database.close();
+
+
+      frontendGenerator(configs);
+
       res.json('ok');
    }
    catch (e) {

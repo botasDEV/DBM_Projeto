@@ -3,7 +3,7 @@ var mustache = require('mustache');
 
 module.exports = (schemasPaths, isBackOffice = false) => {
     let items = [];
-    
+
     schemasPaths.forEach(schemaPath => {
         var schema = JSON.parse(fs.readFileSync(schemaPath.path));
         let title = schema.title;
