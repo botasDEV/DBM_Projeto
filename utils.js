@@ -46,11 +46,13 @@ class Utils {
     }
 
     static exec(command, sync = true) {
+        console.log('Executing Command: ' + command);
         if (!sync) {
             exec(command);
-            return;
+        } else {
+            execSync(command);
         }
-        execSync(command);
+        console.log('######### COMMAND SUCCESSFULY');        
     }
 }
 

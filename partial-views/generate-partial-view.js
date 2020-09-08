@@ -9,7 +9,7 @@ module.exports = (schemasPaths, isBackOffice = false) => {
         let title = schema.title;
         items.push(
             {
-                href: './' + title,
+                href: (isBackOffice ? './' + title : '/' + title.toLowerCase() + '-component'),
                 name: title
             });
     });

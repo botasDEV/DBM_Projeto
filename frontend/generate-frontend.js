@@ -2,12 +2,15 @@ const fs = require('fs');
 const utils = require('../utils');
 const generateDefaultHeaders = require('./generate-default-headers');
 const generateIndex = require('./generate-frontend-index');
-const generateRouting = require('./generate-routing');
+const generateRouting = require('./generate-routing-module');
+const generateComponents = require('./generate-components');
 
 
 
 module.exports = (configs) => {
     let frontEndConfigs = configs.frontend;
+    let schemas = configs.schemas;
+
     let basePath = './Publish/Frontend/'; 
     let appTitle = (frontEndConfigs.title ? frontEndConfigs.title : 'NG APP' );
     let appFolder = appTitle.replace(' ', '-')
@@ -21,7 +24,7 @@ module.exports = (configs) => {
     }
     
     console.log('*** STARTING ANGULAR APP ***');
-    let command = 'cd ' + basePath + ' && ng new ' + appFolder + ' --skip-install=true'; 
+    let command = 'cd ' + basePath + ' && ng new ' + appFolder + ' --skip-install=true --routing'; 
     utils.exec(command);
 
     console.log('*** App Install Packages ***');
@@ -32,17 +35,8 @@ module.exports = (configs) => {
     // TODO: Build Components
     generateIndex(appFolder);    
     generateDefaultHeaders();
-
-    generateRouting();
-
-    
-    
-    
-    
-    
-    
-    
-    
+    generateComponents(schemas, basePath + appFolder);
+    generateRouting(schemas);
     
     
     
@@ -55,5 +49,4 @@ module.exports = (configs) => {
     utils.exec(command, false);
 
     console.log('*** ANGULAR APP SERVED ***');
-
 }
