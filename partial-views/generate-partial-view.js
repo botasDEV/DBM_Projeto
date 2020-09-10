@@ -7,11 +7,13 @@ module.exports = (schemasPaths, isBackOffice = false) => {
     schemasPaths.forEach(schemaPath => {
         var schema = JSON.parse(fs.readFileSync(schemaPath.path));
         let title = schema.title;
-        items.push(
-            {
-                href: (isBackOffice ? './' + title : '/' + title.toLowerCase() + '-component'),
-                name: title
-            });
+        if (isBackOffice || schema.show && !isBackOffice) {
+            items.push(
+                {
+                    href: (isBackOffice ? './' + title : '/' + title.toLowerCase() + '-component'),
+                    name: title
+                });       
+        }
     });
 
     var template = fs.readFileSync('partial-views/navbar.mustache').toString();

@@ -2,6 +2,7 @@
     "title": "Actor",
     "description": "Entity Actor",
     "type": "object",
+    "show": true,
     "properties": {
         "id": {
             "type": "integer",

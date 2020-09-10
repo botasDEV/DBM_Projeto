@@ -34,6 +34,7 @@
         }
         
     },
+    "show": true,
     "required": [
         "name","birthdate"
     ]

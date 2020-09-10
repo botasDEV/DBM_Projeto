@@ -1,9 +1,10 @@
 const fs = require('fs');
 const utils = require('../utils');
 const generateDefaultHeaders = require('./generate-default-headers');
-const generateIndex = require('./generate-frontend-index');
-const generateRouting = require('./generate-routing-module');
+const generateHome = require('./generate-frontend-home');
 const generateComponents = require('./generate-components');
+const generateServices = require('./generate-services');
+const generateAppModule = require('./generate-app-module');
 
 
 
@@ -33,10 +34,11 @@ module.exports = (configs) => {
 
     
     // TODO: Build Components
-    generateIndex(appFolder);    
+    generateAppModule(schemas, appFolder);
     generateDefaultHeaders();
-    generateComponents(schemas, basePath + appFolder);
-    generateRouting(schemas);
+    generateComponents(schemas, appPath);
+    generateHome(appFolder); 
+    generateServices(configs.appServer, schemas, appPath);
     
     
     

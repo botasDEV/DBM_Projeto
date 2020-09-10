@@ -1,0 +1,35 @@
+import { catchError } from 'rxjs/internal/operators';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+
+const endpoint = 'http://{{{endpoint}}}/api/';
+
+
+export class {{title}}Service {
+
+  constructor(private http: HttpClient) {}
+
+  list{{title}}(): Observable<any> {
+      return this.http.get<any>(endpoint + '{{titleLowerCase}}').pipe(
+          catchError(this.handleError)
+      );
+  }
+
+  get{{title}}(id: string): Observable<any> {
+    return this.http.get<any>(endpoint + '{{titleLowerCase}}/' + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  private handleError(error: HttpErrorResponse): any {
+    if (error.error instanceof ErrorEvent) {
+      console.error(error.error.message);
+    } else {
+      console.error(error.status + ' :: ' + error.error);
+    }
+    return throwError(
+      'An error occured while requesting the API');
+  }
+}

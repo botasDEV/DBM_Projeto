@@ -20,6 +20,7 @@
             "type": "string",
             "description": "Movie Cover Path",
             "image": true,
+            "presentationMode": "image",
             "unique": true,
             "faker": "random.image"
         },
@@ -41,6 +42,7 @@
     "required": [
         "title", "cover", "release_date"
     ],
+    "show": true,
     "references": [{
         "model": "Actor",
         "relation": "M-M",
