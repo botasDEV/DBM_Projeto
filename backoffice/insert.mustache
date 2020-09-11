@@ -1,11 +1,11 @@
 <html>
     <body>
         <h2>Add {{pageTitle}}</h2>
-        <form method="Post" id="addForm" onsubmit="add(); return false;">
+        <form method="Post" onsubmit="add(); return false;" id="addForm">
             {{#properties}}
             <div class="form-group">
                 <label for="{{nameLowerCase}}">{{name}}:</label>
-                <input type="{{type}}" class="form-control" name="{{nameLowerCase}}" {{#constraints}} {{name}}="{{value}}" {{/constraints}} {{#required}}required{{/required}}></input>
+                <input type="{{type}}" id="image" class="form-control" name="{{nameLowerCase}}" {{#constraints}} {{name}}="{{value}}" {{/constraints}} {{#required}}required{{/required}}></input>
             </div>
             {{/properties}}
             {{#references}}
@@ -43,15 +43,41 @@
         }); 
         {{/hasReferences}}
 
-        
+
         function add() {
-            let payload = {};
-            let inputs = $('#addForm :input[class=form-control]');
+            var payload = {};
+            var filePath = null;
+            var fileKey = null;
+            var inputs = $('#addForm :input[class=form-control]');
+            var formData = new FormData();
             inputs.each((index, input) => {
-                console.log(input);
-                payload[input.name] = input.value;
+                if (input.type == 'file') {
+                    formData.append('file', input.files[0]);
+                    fileKey = input.name;
+                } else {
+                    payload[input.name] = input.value;
+                }
             });
-            
+
+            if (formData.has('file')) {
+                $.ajax({
+                    url : '../api/upload',
+                    type : 'POST',
+                    data : formData,
+                    processData: false, 
+                    contentType: false,
+                    enctype: 'multipart/form-data',
+                    success : function(data) {
+                        payload[fileKey] = data.file;
+                        create(payload);
+                    }
+                });
+            } else {
+                create(payload);
+            }            
+        }
+
+        function create(payload) {
             $.ajax({
                 type: "POST",
                 url: "../api/{{pageTitle}}",
@@ -66,7 +92,6 @@
                 },
                 dataType: "json"
             });
-            
         }
     </script>
 </html>

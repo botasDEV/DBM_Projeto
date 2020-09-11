@@ -13,6 +13,7 @@
             "type": "string",
             "description": "Genre's Name",
             "unique": true,
+            "title": true,
             "maxLength": 50
         }
         

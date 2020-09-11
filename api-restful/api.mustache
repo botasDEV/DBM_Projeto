@@ -1,13 +1,33 @@
 const express = require('express');
 var router = express.Router();
 
+
+router.post('/upload', (req, res,next) => {
+    const file = req.files.file;
+    
+    const uploadFolder = 'Publish/Public/Images/';
+    let success = true;
+    let filePath = uploadFolder + file.name;
+
+    file.mv(filePath, (err, result) => {
+        if (err) {
+            success = false;
+            console.log(err);
+        }
+    });
+    res.send({
+        success: true,
+        file: filePath 
+    });
+});
+
 {{#schemas}}
 var {{title}} = require('../Models/{{title}}.js');
 
 router.post('/{{title}}', (req, res) => {
     try {
-        console.log(req.body);
         let obj = Object.assign(new {{title}}(), req.body);
+        console.log(obj);
         obj.save(msg => res.json(msg));
     } catch (e) {
         console.log(e);

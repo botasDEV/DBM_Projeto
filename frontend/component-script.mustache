@@ -1,0 +1,27 @@
+import { Component, OnInit } from '@angular/core';
+import { {{title}}Service } from '../services/{{title}}.service';
+
+@Component({
+  selector: 'app-{{titleLowCase}}',
+  templateUrl: './{{titleLowCase}}.component.html',
+  styleUrls: ['./{{titleLowCase}}.component.css'],
+  providers: [{{title}}Service]
+})
+export class {{title}}Component implements OnInit {
+
+  list = [];
+
+  constructor(
+    private service: {{title}}Service
+  ) {}
+
+  ngOnInit() {
+    this.service.list{{title}}().subscribe(val => {
+      this.setData(val);
+    });
+  }
+
+  setData(data) {
+    this.list = data;
+  }
+}

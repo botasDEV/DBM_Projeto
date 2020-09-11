@@ -2,6 +2,7 @@ const fs = require('fs');
 const express = require('express');
 var router = express.Router();
 var app = express();
+var multer = require('multer');
 
 const serverGenerator = require('./server/server-generator.js');
 const classGenerator = require('./models/generate-class.js');
@@ -11,14 +12,20 @@ const backofficeGenerator = require('./backoffice/generate-backoffice.js');
 const partialViewGenerator = require('./partial-views/generate-partial-view.js');
 const frontendGenerator = require('./frontend/generate-frontend');
 
-app.use((req, res, next) => {
-   res.set('Cache-Control', 'no-store')
-   next()
- });
 
 router.post('/generate', (req, res) => {
    var configs = req.configs;
+   var serve_mode = req.body.serve_mode;
+   var styles = req.body.styles;
+   
+   if (serve_mode) {
+      configs.frontend.serve_mode = serve_mode;
+   }
 
+   if (styles) {
+      configs.frontend.style = styles;
+   }
+   
    try {
       serverGenerator(configs.appServer);
       apiGenerator(configs.schemas);
@@ -42,7 +49,7 @@ router.post('/generate', (req, res) => {
       database.close();
 
 
-      frontendGenerator(configs);
+      //frontendGenerator(configs);
 
       res.json('ok');
    }

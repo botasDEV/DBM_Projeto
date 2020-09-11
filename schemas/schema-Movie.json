@@ -12,7 +12,8 @@
         "title": {
             "type": "string",
             "description": "Movie's Title",
-            "maxLength": 50, 
+            "maxLength": 50,
+            "title": true, 
             "unique":false,
             "faker": "random.words"
         },
@@ -20,7 +21,6 @@
             "type": "string",
             "description": "Movie Cover Path",
             "image": true,
-            "presentationMode": "image",
             "unique": true,
             "faker": "random.image"
         },

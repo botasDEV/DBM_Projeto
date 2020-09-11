@@ -5,22 +5,51 @@
     </head>
     <body>
         <h1>Gerador</h1>
+        <h2>Frontend</h2>
+        
+        <p>Servir APP Angular:</p>
+        <input type="radio" id="auto" checked name="serve_mode" value="auto">
+        <label for="auto">Auto</label><br>
+        <input type="radio" id="manual" name="serve_mode" value="manual">
+        <label for="manual">Manual (Comandos a utilizar utilizar para o Build e Serve da App)</label><br>
+        
+        <p>Estilos:</p>
+        <input type="radio" id="default" checked name="styles" value="default">
+        <label for="default">Default (Bootstrap)</label><br>
+        <input type="radio" id="manual-style" name="styles" value="manual-style">
+        <label for="manual-style">Manual (Quero criar os meus proprios estilos)</label><br>
+        
+        <br/>
+        <br/>
+        <br/>
         <button>Gerar APP</button>
         <p id="error" style="color:red; font-style: bold; "></p>
         <p id="success" style="color:green; font-style: bold;"></p>
     </body>
     <script>
         $('button').click((event) => {
-            $('p').hide();
-            $.post(
-                'http://localhost:8182/generate',
-                (data, status) => {
+            let mode = $('input[name=serve_mode]:checked').val();
+            let styles = $('input[name=styles]:checked').val();
+            $('#error').hide();
+            $('#success').hide();
+            var send = {
+                    serve_mode: mode,
+                    styles: styles
+            };
+            console.log(send);
+            $.ajax({
+                url: 'http://localhost:8182/generate',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(send),
+                success: (data, status) => {
                     $('#success').html(status.concat(' - ').concat(data));
                     $('#success').show();
-                })
-            .fail((data) => {
-                $('#error').html(data.status.toString().concat(' - ').concat(data.statusText));
-                $('#error').show();
+                },
+                fail: (data) => {
+                    $('#error').html(data.status.toString().concat(' - ').concat(data.statusText));
+                    $('#error').show();
+                }
             });
         });
     </script>

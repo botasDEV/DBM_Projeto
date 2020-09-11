@@ -1,13 +1,15 @@
 const express = require('express');
 const routes = require('./routes.js');
+var bodyParser = require('body-parser');
 
 module.exports = (config = null)=> {
     if (!config) throw 'Config cannot be null';
     
     var app = express();
-
+    app.use(bodyParser.json());
     app.use((req, res, next) => {
         req.configs = config;
+        
         next();
     });
     app.use(express.static('public'));

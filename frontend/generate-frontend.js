@@ -33,22 +33,26 @@ module.exports = (configs) => {
     utils.exec(command);
 
     
-    // TODO: Build Components
     generateAppModule(schemas, appFolder);
-    generateDefaultHeaders();
+    if (frontEndConfigs.style == 'default') {
+        generateDefaultHeaders();
+    }
     generateComponents(schemas, appPath);
     generateHome(appFolder); 
     generateServices(configs.appServer, schemas, appPath);
     
     
-    
-    console.log('*** App Building ***');
-    command = 'cd ' + basePath + appFolder + ' && ng build';
-    utils.exec(command);
-    
-    console.log('*** App Serving ***');
-    command = 'cd ' + basePath + appFolder + ' && ng serve ' + (appPort ? '--port ' + appPort : '' );
-    utils.exec(command, false);
+    if (frontEndConfigs.serve_mode == 'auto') {
+        console.log('*** App Building ***');
+        command = 'cd ' + basePath + appFolder + ' && ng build';
+        utils.exec(command);
+        
+        console.log('*** App Serving ***');
+        command = 'cd ' + basePath + appFolder + ' && ng serve ' + (appPort ? '--port ' + appPort : '' );
+        utils.exec(command, false);
 
-    console.log('*** ANGULAR APP SERVED ***');
+        console.log('*** ANGULAR APP SERVED ***');
+    } else {
+        console.log('*** ANGULAR APP WILL NOT BE SERVED AS REQUESTED ***');
+    }
 }

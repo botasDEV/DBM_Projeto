@@ -13,8 +13,7 @@ class Database {
             string: 'TEXT',
             integer: 'INTEGER',
             number: 'REAL',
-            date: 'INTEGER',
-            blob: 'BLOB'
+            date: 'INTEGER'
         };
         Object.defineProperty(this, 'db', {writable: true});
         this.scripts = '';
@@ -46,7 +45,7 @@ class Database {
     
         let columns = [];
         Object.keys(jsonSchema.properties).forEach((element, index, aux)=>{
-            let dataType = jsonSchema.properties[element].image ? 'blob' : jsonSchema.properties[element].type;
+            let dataType = jsonSchema.properties[element].type;
             columns.push({
                 name: element,
                 type: this.sqliteTypes[dataType],

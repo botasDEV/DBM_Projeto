@@ -1,0 +1,20 @@
+{{=<% %>=}}
+<div class="row">
+  <div *ngIf="list.length == 0" style="width:100%; margin-top: 20%;">
+        <h3 style="text-align: center; ">There is nothing to show yet.</h3>
+  </div>
+  <div class="col-md-4" *ngFor="let elem of list">
+    <div class="card" style="width: 18rem; margin: 50px 20%; ">
+        <%image%>
+        <div class="card-body">
+          <h5 class="card-title">{{elem.<%title%>}}</h5>
+          <br/>
+          <p class="card-text">
+            <ng-container *ngFor="let property of elem.properties | keyvalue">
+              <b>{{property.key}}</b>: {{property.value}}<br/>
+            </ng-container> 
+          </p>
+        </div>
+    </div>
+  </div>
+</div>

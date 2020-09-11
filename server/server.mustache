@@ -4,16 +4,20 @@ const bodyParser = require('body-parser');
 const api = require('./Controllers/api.js');
 const mustacheExpress = require('mustache-express')();
 const backoffice = require('./Views/backoffice.js');
+const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 app.engine('mustache', mustacheExpress);
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/Views');
 
-console.log(__dirname + '/Public/Css');
+
+app.use(fileUpload());
 app.use('/css', express.static(__dirname + '/Public/Css'));
 app.use('/js', express.static(__dirname + '/Public/Js'));
 app.use('/images', express.static(__dirname + '/Public/Images'));
 app.use(bodyParser.json());
+app.use(cors());
 app.use('/api', api);
 app.use('/backoffice', backoffice);
 

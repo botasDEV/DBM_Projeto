@@ -15,6 +15,7 @@
             "description": "Actor's Name",
             "faker": "name.findName",
             "maxLength": 50,
+            "title": true,
             "unique": false
         },
         "birthdate": {

@@ -9,7 +9,7 @@ module.exports = (server, schemas = [], appPath) => {
         if (!fs.existsSync(servicesDirectory)) {
             fs.mkdirSync(servicesDirectory)
         }
-        let host = 'http://' + (server.host == '0.0.0.0' ? 'localhost' : server.host) + ':' + server.port;
+        let host = 'http://' + (server.host == '0.0.0.0' ? 'localhost' : server.host) + ':' + server.port + '/api/';
         let template = fs.readFileSync('frontend/app-service.mustache').toString();
         let target = servicesDirectory + model.title.toLowerCase() + '.service.ts';
         let view = {
