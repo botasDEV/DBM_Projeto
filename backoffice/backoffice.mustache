@@ -9,11 +9,11 @@ var schema{{title}} = require('../Schemas/Schema-{{title}}.json');
 
 router.get('/{{title}}', (req, res) => {
     
-    
     {{title}}.all((rows)=>{
         let data{{title}} = [];
         let rendered = {};
         let emptyTxt = ["List empty. Click on the button below to add one {{title}}."];
+
         rows.map((row) => {
             let itemData = {};
             itemData.image = [];
@@ -107,7 +107,7 @@ router.get('/{{title}}/Details/:id', (req, res) => {
             references: () => {
                 let allRefs = [];
                 let refs = schema{{title}}.references;
-                console.log(refs);
+                
                 if (refs) {
                     refs.forEach((ref) => {
                         allRefs.push({

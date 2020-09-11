@@ -49,7 +49,7 @@ router.post('/generate', (req, res) => {
       database.close();
 
 
-      //frontendGenerator(configs);
+     frontendGenerator(configs);
 
       res.json('ok');
    }

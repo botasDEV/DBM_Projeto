@@ -68,7 +68,7 @@
                     contentType: false,
                     enctype: 'multipart/form-data',
                     success : function(data) {
-                        payload[fileKey] = data.file;
+                        payload[fileKey] = 'http://localhost:8183' + data.file.replace('Publish/Public', '');
                         create(payload);
                     }
                 });

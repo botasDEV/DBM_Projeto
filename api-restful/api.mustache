@@ -27,7 +27,6 @@ var {{title}} = require('../Models/{{title}}.js');
 router.post('/{{title}}', (req, res) => {
     try {
         let obj = Object.assign(new {{title}}(), req.body);
-        console.log(obj);
         obj.save(msg => res.json(msg));
     } catch (e) {
         console.log(e);
